@@ -2,13 +2,13 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> } 
  */
-exports.seed = async function(knex) {
+export async function seed(knex) {
   // Deletes ALL existing entries
-  await knex('table_name').del()
-  await knex('table_name').insert([
+  await knex('inventories').del()
+  await knex('inventories').insert([
     {
       "id": 1,
-      "warehouse_name": "Manhattan",
+      "warehouse_id": 1,
       "item_name": "Television",
       "description": "This 50\", 4K LED TV provides a crystal-clear picture and vivid colors.",
       "category": "Electronics",
@@ -17,7 +17,7 @@ exports.seed = async function(knex) {
     },
     {
       "id": 2,
-      "warehouse_name": "Manhattan",
+      "warehouse_id": 1,
       "item_name": "Gym Bag",
       "description": "Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.",
       "category": "Gear",

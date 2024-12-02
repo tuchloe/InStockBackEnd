@@ -3,7 +3,7 @@ import knex from "knex";
 import knexConfig from "../knexfile.js";
 
 const router = express.Router();
-const db = knex(knexConfig.development); 
+const db = knex(knexConfig);
 
 router.get("/", async (_req, res) => {
     try {

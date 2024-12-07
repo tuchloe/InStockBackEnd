@@ -16,5 +16,16 @@ router.get("/", async (_req, res) => {
 
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const warehouse = await db("warehouses").where({ id }).first();
+    res.json(warehouse);
+  } catch (error) {
+    console.error("Error fetching warehouse:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 export default router;

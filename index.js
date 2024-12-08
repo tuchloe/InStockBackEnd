@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import warehouseRoute from "./routes/warehouse-router.js"
-
+import inventoryRoute from "./routes/inventories-router.js"
 
 const app = express();
 
@@ -19,6 +19,8 @@ app.get('/api', (_req, res) => {
 });
 
 app.use("/api/warehouses", warehouseRoute);
+
+app.use("/api/inventories", inventoryRoute);
 
 app.all('*', (_req, res) => {
   res.status(404).json({ error: 'Not Found' });

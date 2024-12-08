@@ -8,7 +8,7 @@ const db = knex(knexConfig);
 router.get("/", async ( req, res) => {
     try {
       const warehouses = await db("warehouses").select("*");
-      res.json(warehouses);
+      res.status(200).json(warehouses);
     } catch (error) {
       console.error("Error fetching warehouses:", error);
       res.status(500).json({ message: "Internal server error" });
@@ -21,7 +21,7 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     console.log(id);
     const warehouse = await db("warehouses").where({ id }).first();
-    res.json(warehouse);
+    res.status(200).json(warehouse);
   } catch (error) {
     console.error("Error fetching warehouse:", error);
     res.status(500).json({ message: "Internal server error" });

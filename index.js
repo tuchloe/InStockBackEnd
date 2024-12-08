@@ -22,6 +22,10 @@ app.use("/api/warehouses", warehouseRoute);
 
 app.use("/api/inventories", inventoryRoute);
 
+app.all('*', (_req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 const port = process.env.PORT || 7000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

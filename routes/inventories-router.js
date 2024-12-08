@@ -5,7 +5,7 @@ import knexConfig from "../knexfile.js";
 const router = express.Router();
 const db = knex(knexConfig);
 
-router.get("/inventories", async (_req, res) => {
+router.get("/inventories", async ( req, res) => {
     try {
         const inventories = await db("inventories").select("*");
         res.json(inventories);
@@ -15,9 +15,9 @@ router.get("/inventories", async (_req, res) => {
     }
 });
 
-router.get("/:id", async (_req, res) => {
+router.get("/:id", async ( req, res) => {
     try {
-        const { id } = _req.params;
+        const { id } =  req.params;
         const inventories = await db("inventories").where({ id }).first();
         res.json(inventories);
     } catch (error) {

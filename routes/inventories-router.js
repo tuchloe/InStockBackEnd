@@ -26,4 +26,14 @@ router.get("/:id", async ( req, res) => {
     }
 });
 
+router.delete("/:id", async ( req, res ) => {
+    const { id } = req.params;
+    try {
+        await db("inventories").where({ id: req.params.id }).del();
+        res.sendStatus(204);
+    } catch {
+        res.status(404).json({ message: `Error deleting inventory item ${id}`});
+    }
+});
+
 export default router;

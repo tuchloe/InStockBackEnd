@@ -5,7 +5,7 @@ import knexConfig from "../knexfile.js";
 const router = express.Router();
 const db = knex(knexConfig);
 
-router.get("/inventories", async ( req, res) => {
+router.get("/", async ( req, res) => {
     try {
         const inventories = await db("inventories").select("*");
         res.json(inventories);

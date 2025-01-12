@@ -38,8 +38,10 @@ router.get("/", async ( req, res) => {
         res.status(500).json({ message: "Internal server error" });
       }
     });
-// Edit warehouse details of a selected warehouse (PJT2-18)
+
 router.put("/:id", async (req, res) => {
+  console.log("Received payload:", req.body);
+
   const { id } = req.params;
   const {
     warehouse_name,
@@ -71,15 +73,7 @@ router.put("/:id", async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    if (!validator.isMobilePhone(contact_phone, "any", { strictMode: false })) {
-      return res.status(400).json({ message: "Invalid phone number." });
-    }
-
-    if (!validator.isEmail(contact_email)) {
-      return res.status(400).json({ message: "Invalid email format." });
-    }
-
-    const updatedWarehouse = await db("warehouses")
+    await db("warehouses")
       .where("id", id)
       .update({
         warehouse_name,
@@ -90,15 +84,21 @@ router.put("/:id", async (req, res) => {
         contact_position,
         contact_phone,
         contact_email,
-      })
-      .returning("*"); 
+      });
 
-    return res.status(200).json(updatedWarehouse[0]);
+    const updatedWarehouse = await db("warehouses").where("id", id).first();
+
+    if (!updatedWarehouse) {
+      return res.status(404).json({ message: "Warehouse not found after update." });
+    }
+
+    return res.status(200).json(updatedWarehouse);
   } catch (error) {
     console.error("Error updating warehouse:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
   
 // DELETE a warehouse (PJT2-19)
 router.delete("/:id", async (req, res) => {

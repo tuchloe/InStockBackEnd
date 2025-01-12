@@ -6,7 +6,6 @@ import validator from "validator";
 const router = express.Router();
 const db = knex(knexConfig);
 
-// GET list of warehouses (PJT2-14)
 router.get("/", async ( req, res) => {
     try {
       const warehouses = await db("warehouses").select("*");
@@ -99,8 +98,62 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  const {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  } = req.body;
+
+  try {
+    if (
+      !warehouse_name ||
+      !address ||
+      !city ||
+      !country ||
+      !contact_name ||
+      !contact_position ||
+      !contact_phone ||
+      !contact_email
+    ) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const phoneRegex = /^\+?(\d{1,4})?[-.\s]?(\(?\d{1,4}\)?[-.\s]?)?(\d{1,4}[-.\s]?)*\d{1,4}$/;
+    if (!phoneRegex.test(contact_phone)) {
+      return res.status(400).json({ message: "Invalid phone number format." });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contact_email)) {
+      return res.status(400).json({ message: "Invalid email address format." });
+    }
+
+    const newWarehouse = await db("warehouses").insert({
+      warehouse_name,
+      address,
+      city,
+      country,
+      contact_name,
+      contact_position,
+      contact_phone,
+      contact_email,
+    });
+
+    return res.status(201).json({ message: "Warehouse created successfully." });
+  } catch (error) {
+    console.error("Error adding warehouse:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+
   
-// DELETE a warehouse (PJT2-19)
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
